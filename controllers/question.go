@@ -272,7 +272,7 @@ func UpdateQuestion(c *gin.Context) {
 }
 
 func DeleteQuestion(c *gin.Context) {
-	ip := c.GetHeader("Referer")
+	ip := c.Request.Header.Get("Referer")
 	id := c.Param("id")
 	questions := []models.Question{}
 	questionId, _ := strconv.Atoi(id)

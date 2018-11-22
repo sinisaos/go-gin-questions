@@ -163,9 +163,11 @@
                         </div>
                       </div>
                         {{end}}
+
                     <div class="tab-pane" id="answers">
                         <br>
                         <div class="tab-pane" id="answers">
+                          {{if .user}}
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover">
                                     <thead>
@@ -174,6 +176,7 @@
             				                        <th class="col-md-1">Created</th>
                                             <th class="col-md-1">Dislikes</th>
                                             <th class="col-md-1">Likes</th>
+                                            <th class="col-md-1"><em class="fa fa-cog"></em></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -183,12 +186,44 @@
           				                        <td>{{.CreatedAt.Format "2006-01-02 15:04"}}</td>
                                           <td>{{.DisLikes}}</td>
                                           <td>{{.Likes}}</td>
+                                          {{if eq .User.Username $user}}
+                                          <td><form action="/answerdelete/{{.Id}}" method="post">
+                                              <a href="/answeredit/{{.Id}}" class="btn btn-info"><i class="fa fa-pencil"></i></a>
+                                              <button class="btn btn-danger"><i class="fa fa-trash"></i></button><br>
+                                          </form></td>
+                                          {{else}}
+                                          <td><em class="fa fa-cog"></td>
+                                          {{end}}
+
                                         </tr>
                                 	     {{end}}
                                     </tbody>
                                 </table>
-
                         </div>
+                        {{else}}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1">Content</th>
+                                        <th class="col-md-1">Created</th>
+                                        <th class="col-md-1">Dislikes</th>
+                                        <th class="col-md-1">Likes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  {{range .answers}}
+                                    <tr>
+                                      <td><p>{{.Body}}</p></td>
+                                      <td>{{.CreatedAt.Format "2006-01-02 15:04"}}</td>
+                                      <td>{{.DisLikes}}</td>
+                                      <td>{{.Likes}}</td>
+                                    </tr>
+                                   {{end}}
+                                </tbody>
+                            </table>
+                    </div>
+                    {{end}}
                     </div>
                     <!--/tab-pane-->
 

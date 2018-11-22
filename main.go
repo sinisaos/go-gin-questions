@@ -51,15 +51,17 @@ func main() {
 	r.POST("/savequestion", controllers.SaveQuestion)
 	r.POST("/questionlikes", controllers.QuestionLikes)
 	r.POST("/saveanswer", controllers.SaveAnswer)
-	//answe
+	//answers
 	r.POST("/acceptanswer", controllers.AcceptAnswer)
 	r.POST("/answerlikes", controllers.AnswerLikes)
 	r.POST("/answerdislikes", controllers.AnswerDisLikes)
+	r.GET("/answeredit/:id", controllers.EditAnswer)
+	r.POST("/answerupdate/:id", controllers.UpdateAnswer)
+	r.POST("/answerdelete/:id", controllers.AnswerDelete)
 	//tags
 	r.GET("/tags/:id", controllers.Tags)
 	r.GET("/tagedit/:id", controllers.EditTag)
 	r.POST("/tagupdate", controllers.UpdateTag)
-	//r.POST("/answerdelete", controllers.AnswerDelete)
 	//users
 	r.GET("/signup", controllers.SignUp)
 	r.POST("/save", controllers.SaveUser)

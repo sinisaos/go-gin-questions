@@ -52,6 +52,41 @@ func AcceptAnswer(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/show/"+t)
 }
 
+func EditAnswer(c *gin.Context) {
+	id := c.Param("id")
+	session := sessions.Default(c)
+	user := session.Get("user")
+	answer := models.Answer{}
+	users := []models.User{}
+
+	var answerUserID int
+	config.DB.Find(&users)
+	for _, v := range users {
+		if v.Username == user {
+			answerUserID = v.Id
+		}
+	}
+
+	config.DB.Find(&answer, id)
+
+	c.HTML(http.StatusOK, "answeredit.tmpl.html",
+		gin.H{"answer": answer,
+			"user":         user,
+			"answerUserID": answerUserID,
+		})
+}
+
+func UpdateAnswer(c *gin.Context) {
+	id := c.Param("id")
+	session := sessions.Default(c)
+	body := c.PostForm("body")
+	answer := models.Answer{}
+
+	config.DB.Model(&answer).Where("id = ?", id).Update("body", body)
+	session.Save()
+	c.Redirect(http.StatusFound, "/")
+}
+
 func AnswerLikes(c *gin.Context) {
 	answer := []models.Answer{}
 	id := c.PostForm("qid")
@@ -80,11 +115,11 @@ func AnswerDisLikes(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/show/"+t)
 }
 
-/*
 func AnswerDelete(c *gin.Context) {
-	id := c.Params("id")
+	id := c.Param("id")
 	ip := c.Request.Header.Get("Referer")
+	answerId, _ := strconv.Atoi(id)
 	answers := []models.Answer{}
-	config.DB.Delete(&answers, id)
+	config.DB.Delete(&answers, answerId)
 	c.Redirect(http.StatusFound, ip)
-}*/
+}

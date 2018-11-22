@@ -166,8 +166,9 @@
                                   <td>{{.DisLikes}}</td>
                                   <td>{{.Likes}}</td>
 
-  				                        <td><form action="/answers/{{.Id}}/delete" method="post">
-                                      <button class="btn btn-danger"><i class="fa fa-trash"></i> Delete answer</button><br>
+  				                        <td><form action="/answerdelete/{{.Id}}" method="post">
+                                      <a href="/answeredit/{{.Id}}" class="btn btn-info"><i class="fa fa-pencil"></i></a>
+                                      <button class="btn btn-danger"><i class="fa fa-trash"></i></button><br>
                                   </form></td>
                                 </tr>
                         	     {{end}}

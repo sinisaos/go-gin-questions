@@ -126,7 +126,6 @@ func SaveUser(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	//ip := c.GetHeader("Referer")
 	id := c.Param("id")
 	users := []models.User{}
 	userId, _ := strconv.Atoi(id)
