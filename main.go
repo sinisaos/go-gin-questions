@@ -71,6 +71,7 @@ func main() {
 	r.POST("/signin", controllers.SignIn)
 	r.GET("/profile/:id", controllers.Profile)
 	r.GET("/admin", controllers.Admin)
+	r.GET("/rank", controllers.RankUser)
 
 	r.Run(":8080")
 }

@@ -218,5 +218,32 @@ func Admin(c *gin.Context) {
 			"admin":   admin,
 			"user":    user,
 		})
+}
 
+func RankUser(c *gin.Context) {
+	type Result struct {
+		Username string
+		Total    int
+	}
+	results := []Result{}
+	users := []models.User{}
+	session := sessions.Default(c)
+	user := session.Get("user")
+	var userId int
+
+	config.DB.Find(&users)
+
+	for _, v := range users {
+		if v.Username == user {
+			userId = v.Id
+		}
+	}
+
+	session.Save()
+	config.DB.Raw("SELECT users.username, count(answers.is_accepted_answer) as total FROM users JOIN answers ON users.id = answers.user_id WHERE answers.is_accepted_answer = true GROUP BY users.id ORDER BY total DESC").Scan(&results)
+	c.HTML(http.StatusOK, "ranking.tmpl.html",
+		gin.H{"results": results,
+			"user":   user,
+			"userId": userId,
+		})
 }
