@@ -57,6 +57,180 @@ func AllQuestions(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.tmpl.html", h)
 }
 
+func UnsolvedQuestions(c *gin.Context) {
+	h := gin.H{}
+	questions := []models.Question{}
+	users := []models.User{}
+	session := sessions.Default(c)
+	user := session.Get("user")
+	p := c.Query("page")
+	var count int
+	config.DB.Where("accepted_answer = false").Find(&questions).Count(&count)
+
+	var userId int
+
+	config.DB.Find(&users)
+
+	for _, v := range users {
+		if v.Username == user {
+			userId = v.Id
+		}
+	}
+
+	if p == "" {
+		p = "1"
+	}
+	page, _ := strconv.ParseInt(p, 10, 32)
+	per := int64(3)
+	totalPages := int(math.Ceil(float64(count) / float64(per)))
+	offset := per * (page - 1)
+
+	config.DB.Preload("Tags").
+		Preload("User").
+		Where("accepted_answer = false").
+		Order("id desc").
+		Limit(per).
+		Offset(offset).
+		Find(&questions)
+
+	h["questions"] = questions
+	h["user"] = user
+	h["userId"] = userId
+	h["totalPages"] = totalPages
+	h["Flash"] = session.Flashes()
+	c.HTML(http.StatusOK, "unsolved.tmpl.html", h)
+}
+
+func SolvedQuestions(c *gin.Context) {
+	h := gin.H{}
+	questions := []models.Question{}
+	users := []models.User{}
+	session := sessions.Default(c)
+	user := session.Get("user")
+	p := c.Query("page")
+	var count int
+	config.DB.Where("accepted_answer = true").Find(&questions).Count(&count)
+
+	var userId int
+
+	config.DB.Find(&users)
+
+	for _, v := range users {
+		if v.Username == user {
+			userId = v.Id
+		}
+	}
+
+	if p == "" {
+		p = "1"
+	}
+	page, _ := strconv.ParseInt(p, 10, 32)
+	per := int64(3)
+	totalPages := int(math.Ceil(float64(count) / float64(per)))
+	offset := per * (page - 1)
+
+	config.DB.Preload("Tags").
+		Preload("User").
+		Where("accepted_answer = true").
+		Order("id desc").
+		Limit(per).
+		Offset(offset).
+		Find(&questions)
+
+	h["questions"] = questions
+	h["user"] = user
+	h["userId"] = userId
+	h["totalPages"] = totalPages
+	h["Flash"] = session.Flashes()
+	c.HTML(http.StatusOK, "solved.tmpl.html", h)
+}
+
+func MostViewedQuestions(c *gin.Context) {
+	h := gin.H{}
+	questions := []models.Question{}
+	users := []models.User{}
+	session := sessions.Default(c)
+	user := session.Get("user")
+	p := c.Query("page")
+	var count int
+	config.DB.Find(&questions).Count(&count)
+
+	var userId int
+
+	config.DB.Find(&users)
+
+	for _, v := range users {
+		if v.Username == user {
+			userId = v.Id
+		}
+	}
+
+	if p == "" {
+		p = "1"
+	}
+	page, _ := strconv.ParseInt(p, 10, 32)
+	per := int64(3)
+	totalPages := int(math.Ceil(float64(count) / float64(per)))
+	offset := per * (page - 1)
+
+	config.DB.Preload("Tags").
+		Preload("User").
+		Order("views desc").
+		Limit(per).
+		Offset(offset).
+		Find(&questions)
+
+	h["questions"] = questions
+	h["user"] = user
+	h["userId"] = userId
+	h["totalPages"] = totalPages
+	h["Flash"] = session.Flashes()
+	c.HTML(http.StatusOK, "viewed.tmpl.html", h)
+}
+
+func OldestQuestions(c *gin.Context) {
+	h := gin.H{}
+	questions := []models.Question{}
+	users := []models.User{}
+	session := sessions.Default(c)
+	user := session.Get("user")
+	p := c.Query("page")
+	var count int
+	config.DB.Find(&questions).Count(&count)
+
+	var userId int
+
+	config.DB.Find(&users)
+
+	for _, v := range users {
+		if v.Username == user {
+			userId = v.Id
+		}
+	}
+
+	if p == "" {
+		p = "1"
+	}
+	page, _ := strconv.ParseInt(p, 10, 32)
+	per := int64(3)
+	totalPages := int(math.Ceil(float64(count) / float64(per)))
+	offset := per * (page - 1)
+
+	config.DB.Preload("Tags").
+		Preload("User").
+		Order("id asc").
+		Limit(per).
+		Offset(offset).
+		Find(&questions)
+
+	h["questions"] = questions
+	h["user"] = user
+	h["userId"] = userId
+	h["totalPages"] = totalPages
+	h["Flash"] = session.Flashes()
+	c.HTML(http.StatusOK, "oldest.tmpl.html", h)
+}
+
 func SearchQuestions(c *gin.Context) {
 	h := gin.H{}
 	questions := []models.Question{}

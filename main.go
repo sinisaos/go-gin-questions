@@ -42,6 +42,10 @@ func main() {
 
 	//questions
 	r.GET("/", controllers.AllQuestions)
+	r.GET("/unsolved", controllers.UnsolvedQuestions)
+	r.GET("/solved", controllers.SolvedQuestions)
+	r.GET("/viewed", controllers.MostViewedQuestions)
+	r.GET("/oldest", controllers.OldestQuestions)
 	r.GET("/search", controllers.SearchQuestions)
 	r.GET("/show/:id", controllers.ShowQuestion)
 	r.GET("/create", controllers.CreateQuestion)
