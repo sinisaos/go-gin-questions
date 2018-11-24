@@ -62,6 +62,7 @@ func main() {
 	r.GET("/tags/:id", controllers.Tags)
 	r.GET("/tagedit/:id", controllers.EditTag)
 	r.POST("/tagupdate", controllers.UpdateTag)
+	r.GET("/categories", controllers.Categories)
 	//users
 	r.GET("/signup", controllers.SignUp)
 	r.POST("/save", controllers.SaveUser)

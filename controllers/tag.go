@@ -77,3 +77,31 @@ func UpdateTag(c *gin.Context) {
 	session.Save()
 	c.Redirect(http.StatusFound, host+next)
 }
+
+func Categories(c *gin.Context) {
+	type Result struct {
+		Name  string
+		Total int
+	}
+	results := []Result{}
+	users := []models.User{}
+	session := sessions.Default(c)
+	user := session.Get("user")
+	var userId int
+
+	config.DB.Find(&users)
+
+	for _, v := range users {
+		if v.Username == user {
+			userId = v.Id
+		}
+	}
+
+	session.Save()
+	config.DB.Raw("SELECT DISTINCT name, count(name) as total FROM tags GROUP BY name ORDER BY total DESC").Scan(&results)
+	c.HTML(http.StatusOK, "categories.tmpl.html",
+		gin.H{"results": results,
+			"user":   user,
+			"userId": userId,
+		})
+}
