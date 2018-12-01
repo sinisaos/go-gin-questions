@@ -465,3 +465,22 @@ func QuestionLikes(c *gin.Context) {
 	t := strconv.Itoa(questionId)
 	c.Redirect(http.StatusFound, "/show/"+t)
 }
+
+func Chat(c *gin.Context) {
+	users := []models.User{}
+	session := sessions.Default(c)
+	user := session.Get("user")
+	var userId int
+
+	config.DB.Find(&users)
+
+	for _, v := range users {
+		if v.Username == user {
+			userId = v.Id
+		}
+	}
+	c.HTML(http.StatusOK, "chat.tmpl.html",gin.H{
+		"userId": userId,
+		"user": user,
+	})
+}

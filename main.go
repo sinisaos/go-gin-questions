@@ -11,6 +11,7 @@ import (
 	"github.com/sinisaos/questions/config"
 	"github.com/sinisaos/questions/controllers"
 	"github.com/sinisaos/questions/models"
+	"gopkg.in/olahol/melody.v1"
 )
 
 var err error
@@ -77,6 +78,18 @@ func main() {
 	r.GET("/profile/:id", controllers.Profile)
 	r.GET("/admin", controllers.Admin)
 	r.GET("/rank", controllers.RankUser)
+	//chat
+	r.GET("/chat", controllers.Chat)
+
+	m := melody.New()
+
+	r.GET("/ws", func(c *gin.Context) {
+		m.HandleRequest(c.Writer, c.Request)
+	})
+
+	m.HandleMessage(func(s *melody.Session, msg []byte) {
+		m.Broadcast(msg)
+	})
 
 	r.Run(":8080")
 }

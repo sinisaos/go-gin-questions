@@ -43,6 +43,15 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
+          {{if not .userId }}
+          <li>
+            <a href="/login"><i class="fa fa-commenting-o" aria-hidden="true"></i>&nbsp; Chat</a>
+          </li>
+          {{else}}
+          <li>
+            <a href="/chat"><i class="fa fa-commenting-o" aria-hidden="true"></i>&nbsp; Chat</a>
+          </li>
+          {{end}}
           <li>
             <a href="/categories"> Categories</a>
           </li>
@@ -108,6 +117,12 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2">
+      <a href="/" class="btn btn-link">All Questions</a>
+      <a href="/unsolved" class="btn btn-link">Open</a>
+      <a href="/solved" class="btn btn-link">Solved</a>
+      <a href="/viewed" class="btn btn-link">Most viewed</a>
+      <a href="/oldest" class="btn btn-link">Oldest</a>
+      <br><br>
 {{range .questions}}
 {{$tags := .Tags}}
     <div class="list-group">

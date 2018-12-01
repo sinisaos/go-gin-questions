@@ -25,6 +25,15 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
+          {{if not .answerUserID }}
+          <li>
+            <a href="/login"><i class="fa fa-commenting-o" aria-hidden="true"></i>&nbsp; Chat</a>
+          </li>
+          {{else}}
+          <li>
+            <a href="/chat"><i class="fa fa-commenting-o" aria-hidden="true"></i>&nbsp; Chat</a>
+          </li>
+          {{end}}
           <li>
             <a href="/categories"> Categories</a>
           </li>
