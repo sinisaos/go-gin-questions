@@ -41,6 +41,10 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
+	config.DB.Model(&user).
+		Where("users.username = ?", username).
+		UpdateColumn("is_logged_in", gorm.Expr("is_logged_in + ?", 1))
+
 	session.Set("user", username)
 	session.Save()
 
@@ -135,6 +139,12 @@ func DeleteUser(c *gin.Context) {
 
 func Logout(c *gin.Context) {
 	session := sessions.Default(c)
+	usr := models.User{}
+	user := session.Get("user")
+	config.DB.Model(&usr).
+		Where("users.username = ?", user).
+		UpdateColumn("is_logged_in", gorm.Expr("is_logged_in - ?", 1))
+
 	session.Delete("user")
 	session.Save()
 	c.Redirect(http.StatusSeeOther, "/")

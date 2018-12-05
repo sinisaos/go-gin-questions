@@ -45,7 +45,7 @@
         <ul class="nav navbar-nav navbar-right">
           {{if not .userId }}
           <li>
-            <a href="/login"><i class="fa fa-commenting-o" aria-hidden="true"></i>&nbsp; Chat</a>
+            <a href="/login?next=/chat"><i class="fa fa-commenting-o" aria-hidden="true"></i>&nbsp; Chat</a>
           </li>
           {{else}}
           <li>
@@ -108,15 +108,21 @@
             <center>
               <h3>Chat</h3>
             </center>
+              <span>Online users:</span>
+              {{range .results}}
+              <span>{{.Username}},</span>
+              {{end}}<br><br>
+              <center>
             <div class="form-group">
               <pre class="form-control" id="chat"></pre><br>
               <input class="form-control" placeholder="Type message" id="text" type="text">
             </div>
+            </center>
         </div>
       </div>
     </div>
     <script>
-      var url = "wss://" + window.location.host + "/ws";
+      var url = "ws://" + window.location.host + "/ws";
       var ws = new WebSocket(url);
       var name = {{.user}};
       var chat = document.getElementById("chat");

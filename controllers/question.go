@@ -467,6 +467,16 @@ func QuestionLikes(c *gin.Context) {
 }
 
 func Chat(c *gin.Context) {
+	type Result struct {
+		Username string
+	}
+
+	results := []Result{}
+	config.DB.Raw("SELECT username FROM users WHERE is_logged_in = 1").Scan(&results)
+
+	c.Writer.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate") // HTTP 1.1.
+	c.Writer.Header().Set("Pragma", "no-cache")                                   // HTTP 1.0.
+	c.Writer.Header().Set("Expires", "0")                                         // Proxies.
 	users := []models.User{}
 	session := sessions.Default(c)
 	user := session.Get("user")
@@ -479,8 +489,14 @@ func Chat(c *gin.Context) {
 			userId = v.Id
 		}
 	}
-	c.HTML(http.StatusOK, "chat.tmpl.html",gin.H{
-		"userId": userId,
-		"user": user,
+
+	if user == nil {
+		c.Redirect(http.StatusSeeOther, "/login")
+	}
+
+	c.HTML(http.StatusOK, "chat.tmpl.html", gin.H{
+		"userId":  userId,
+		"user":    user,
+		"results": results,
 	})
 }

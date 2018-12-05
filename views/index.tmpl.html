@@ -45,7 +45,7 @@
         <ul class="nav navbar-nav navbar-right">
           {{if not .userId }}
           <li>
-            <a href="/login"><i class="fa fa-commenting-o" aria-hidden="true"></i>&nbsp; Chat</a>
+            <a href="/login?next=/chat"><i class="fa fa-commenting-o" aria-hidden="true"></i>&nbsp; Chat</a>
           </li>
           {{else}}
           <li>
@@ -90,7 +90,6 @@
         </ul>
       </div>
     </nav>
-
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
